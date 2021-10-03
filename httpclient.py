@@ -50,7 +50,7 @@ class HTTPClient(object):
     def request_data(self, url, host_name):
         block = (urllib.parse.urlparse(url))
         path = block.path
-        if path == None:
+        if path == "":
             path = "/"
         else:
             path
@@ -123,7 +123,17 @@ class HTTPClient(object):
     def POST(self, url, args=None):
         code = 500
         body = ""
-        return HTTPResponse(code, body)
+
+        host_name, client_port = self.get_host_port(url)
+        '''
+        self.connect(host_name, client_port)
+        request = self.post_data(url, host_name)
+        # send to server
+        self.sendall(request)
+        # respond from server
+        response = self.recvall(self.socket)
+        return HTTPResponse(status_code, body)
+        '''
 
     def command(self, url, command="GET", args=None):
         if (command == "POST"):
