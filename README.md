@@ -11,6 +11,11 @@ Contributors / Licensing
 ========================
 
 Generally everything is LICENSE'D under the Apache 2 license by Abram Hindle, 
+
+httpclient.py contains additional contributions from:
+    - Belton He
+    - King Fu (xinjian)(collaboration)
+    
 https://github.com/tywtyw2002, and https://github.com/treedust
 
 But the server.py example is derived from the python documentation

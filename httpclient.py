@@ -55,15 +55,30 @@ class HTTPClient(object):
             path = "/"
         else:   
             path
-        print(path)
+
         payload = f'GET {path} HTTP/1.1\r\nHost: {host_name}\r\nAccept: */*\r\nConnection: close\r\n\r\n'
-        print("payload constructed")
+        #print("payload constructed")
         #send payload
         self.sendall(payload)
 
     # Constructing POST to the server
-    def post_data(self, url, host_name):
-        pass
+    def post_data(self, url, host_name, args):  
+        block = (urllib.parse.urlparse(url))
+        path = block.path
+        if path == "":
+            path = "/"
+        else:   
+            path
+
+        if args == None:
+            field = ""
+        else:
+            field = urllib.parse.urlencode(args)
+        content_length = len(field)
+
+        payload = f'POST {path} HTTP/1.1\r\nHost: {host_name}\r\nAccept: */*\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: {content_length}\r\nConnection: close\r\n\r\n{field}'
+        #send payload
+        self.sendall(payload)
 
     # creating the connection once we have host and port
     def connect(self, host, port):
@@ -130,12 +145,10 @@ class HTTPClient(object):
         body = ""
 
         host_ip, host_name, client_port = self.get_host_port(url)
-
-        '''
         self.connect(host_ip, client_port)
 
         #construct and sent request
-        self.request_data(url, host_name)
+        self.post_data(url, host_name, args)
 
         # respond from server
         response = self.recvall(self.socket)
@@ -150,14 +163,13 @@ class HTTPClient(object):
         print(body)
         self.close()
         return HTTPResponse(status_code, body)
-        '''
 
     def command(self, url, command="GET", args=None):
         if (command == "POST"):
-            print("Post")
+            #print("Post")
             return self.POST( url, args )
         else:
-            print("Get")
+            #print("Get")
             return self.GET( url, args )
         
     
@@ -168,8 +180,8 @@ if __name__ == "__main__":
         help()
         sys.exit(1)
     elif (len(sys.argv) == 3):
-        print("Method and URL")
+        #print("Method and URL")
         print(client.command( sys.argv[2], sys.argv[1] ))
     else:
-        print("Just Method")
+        #print("Just Method")
         print(client.command( sys.argv[1] ))
