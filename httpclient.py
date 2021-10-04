@@ -71,11 +71,11 @@ class HTTPClient(object):
             path
 
         if args == None:
-            field = ""
+            field = urllib.parse.urlencode("")
         else:
             field = urllib.parse.urlencode(args)
         content_length = len(field)
-
+        print(field)
         payload = f'POST {path} HTTP/1.1\r\nHost: {host_name}\r\nAccept: */*\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: {content_length}\r\nConnection: close\r\n\r\n{field}'
         #send payload
         self.sendall(payload)
