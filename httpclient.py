@@ -56,7 +56,7 @@ class HTTPClient(object):
         else:   
             path
 
-        payload = f'GET {path} HTTP/1.1\r\nHost: {host_name}\r\nAccept: */*\r\nConnection: close\r\n\r\n'
+        payload = f'GET {path} HTTP/1.1\r\nHost: {host_name}\r\nAccept: */*\r\nAccept-Charset: UTF-8\r\nConnection: close\r\n\r\n'
         #print("payload constructed")
         #send payload
         self.sendall(payload)
