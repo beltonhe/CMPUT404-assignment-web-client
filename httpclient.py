@@ -35,16 +35,17 @@ class HTTPResponse(object):
 class HTTPClient(object):
     # get host and port of the url you want 
     def get_host_port(self,url):
-        block = (urllib.parse.urlparse(url))
-        scheme = block.scheme
+        block = urllib.parse.urlparse(url)
         port = block.port
         host = block.hostname
 
+        remote_ip = socket.gethostbyname(host)
+
         # port 80 or the url already contains host and port
         if port == None:
-            return host, 80
+            return remote_ip, host, 80
         else:
-            return host, port
+            return remote_ip, host, port
 
     # Constructing GET request to send to server 
     def request_data(self, url, host_name):
@@ -54,6 +55,7 @@ class HTTPClient(object):
             path = "/"
         else:   
             path
+        print(path)
         payload = f'GET {path} HTTP/1.1\r\nHost: {host_name}\r\nAccept: */*\r\nConnection: close\r\n\r\n'
         print("payload constructed")
         #send payload
@@ -103,8 +105,8 @@ class HTTPClient(object):
         code = 500
         body = ""
 
-        host_name, client_port = self.get_host_port(url)
-        self.connect(host_name, client_port)
+        host_ip, host_name, client_port = self.get_host_port(url)
+        self.connect(host_ip, client_port)
 
         #construct and sent request
         self.request_data(url, host_name)
@@ -127,14 +129,26 @@ class HTTPClient(object):
         code = 500
         body = ""
 
-        host_name, client_port = self.get_host_port(url)
+        host_ip, host_name, client_port = self.get_host_port(url)
 
         '''
-        self.connect(host_name, client_port)
-        self.post_data(url, host_name)
+        self.connect(host_ip, client_port)
+
+        #construct and sent request
+        self.request_data(url, host_name)
 
         # respond from server
         response = self.recvall(self.socket)
+
+        #get code and body
+        status_code = self.get_code(response)
+        headers = self.get_headers(response)
+        body = self.get_body(response)
+
+        print(status_code)
+        print(headers)
+        print(body)
+        self.close()
         return HTTPResponse(status_code, body)
         '''
 
