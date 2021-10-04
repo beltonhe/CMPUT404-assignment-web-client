@@ -40,7 +40,7 @@ class HTTPClient(object):
         port = block.port
         host = block.hostname
 
-        # port 80 for Http and 443 for Https scheme or the url already contains host and port
+        # port 80 for Http or the url already contains host and port
         if scheme == "http" and port == None:
             return host, 80
         else:
@@ -52,11 +52,12 @@ class HTTPClient(object):
         path = block.path
         if path == "":
             path = "/"
-        else:
+        else:   
             path
         payload = f'GET {path} HTTP/1.1\r\nHost: {host_name}\r\nAccept: */*\r\nConnection: close\r\n\r\n'
         print("payload constructed")
-        return payload
+        #send payload
+        self.sendall(payload)
 
     # Constructing POST to the server
     def post_data(self, url, host_name):
@@ -104,9 +105,10 @@ class HTTPClient(object):
 
         host_name, client_port = self.get_host_port(url)
         self.connect(host_name, client_port)
+        
+        #construct request
         request = self.request_data(url, host_name)
-        # send to server
-        self.sendall(request)
+
         # respond from server
         response = self.recvall(self.socket)
 
@@ -125,6 +127,7 @@ class HTTPClient(object):
         body = ""
 
         host_name, client_port = self.get_host_port(url)
+
         '''
         self.connect(host_name, client_port)
         request = self.post_data(url, host_name)
