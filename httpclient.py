@@ -40,8 +40,8 @@ class HTTPClient(object):
         port = block.port
         host = block.hostname
 
-        # port 80 for Http or the url already contains host and port
-        if scheme == "http" and port == None:
+        # port 80 or the url already contains host and port
+        if port == None:
             return host, 80
         else:
             return host, port
