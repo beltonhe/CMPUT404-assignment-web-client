@@ -105,9 +105,9 @@ class HTTPClient(object):
 
         host_name, client_port = self.get_host_port(url)
         self.connect(host_name, client_port)
-        
-        #construct request
-        request = self.request_data(url, host_name)
+
+        #construct and sent request
+        self.request_data(url, host_name)
 
         # respond from server
         response = self.recvall(self.socket)
@@ -130,9 +130,8 @@ class HTTPClient(object):
 
         '''
         self.connect(host_name, client_port)
-        request = self.post_data(url, host_name)
-        # send to server
-        self.sendall(request)
+        self.post_data(url, host_name)
+
         # respond from server
         response = self.recvall(self.socket)
         return HTTPResponse(status_code, body)
