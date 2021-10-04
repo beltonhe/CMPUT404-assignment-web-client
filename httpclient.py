@@ -112,6 +112,7 @@ class HTTPClient(object):
         # respond from server
         response = self.recvall(self.socket)
 
+        #get code and body
         status_code = self.get_code(response)
         headers = self.get_headers(response)
         body = self.get_body(response)
